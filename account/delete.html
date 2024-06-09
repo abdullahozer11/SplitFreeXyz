@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Account - SplitFree</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header>
@@ -23,7 +23,7 @@
                 <input type="checkbox" id="confirmation" name="confirmation" required>
             </div>
 
-            <label for="verif">Type "Delete account permanently"</label>
+            <label for="verif">Type "Delete account data permanently"</label>
             <input type="text" id="verif" name="verif" required>
 
             <button type="submit">Delete Account</button>
@@ -33,7 +33,7 @@
     <script>
         const supabaseUrl = 'https://qpummxvizckytrrsiaig.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdW1teHZpemNreXRycnNpYWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1NjgzMDgsImV4cCI6MjAyODE0NDMwOH0.DYJIU3x0pd5Ub6PDz1vlJCs07O9WFIXokQLD0By8HbQ';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         document.getElementById('delete-account-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -43,9 +43,9 @@
             const confirmation = document.getElementById('confirmation').checked;
             const verif = document.getElementById('verif').value;
 
-            if (confirmation && verif === "Delete account permanently") {
+            if (confirmation && verif === "Delete account data permanently") {
                 try {
-                    const { data: signInData, error: signInError } = await supabase.auth.signIn({ email, password });
+                    const { data: signInData, error: signInError } = await supabaseClient.auth.signIn({ email, password });
 
                     if (signInError) {
                         alert('Error signing in: ' + signInError.message);
@@ -53,17 +53,17 @@
                     }
 
                     const userId = signInData.user.id;
-                    const { error: deleteError } = await supabase
-                        .from('users')
+                    const { error: deleteError } = await supabaseClient
+                        .from('profiles')
                         .delete()
                         .eq('id', userId);
 
                     if (deleteError) {
-                        alert('There was an error deleting your account: ' + deleteError.message);
+                        alert('There was an error deleting your account data: ' + deleteError.message);
                     } else {
-                        alert('Account deleted successfully.');
+                        alert('Account data deleted successfully.');
                         // Optionally, sign the user out and redirect them
-                        await supabase.auth.signOut();
+                        await supabaseClient.auth.signOut();
                         window.location.href = '/goodbye';
                     }
                 } catch (error) {
@@ -71,7 +71,7 @@
                     alert('There was an error processing your request.');
                 }
             } else {
-                alert('Please confirm and type "Delete account permanently" to proceed.');
+                alert('Please confirm and type "Delete account data permanently" to proceed.');
             }
         });
     </script>
