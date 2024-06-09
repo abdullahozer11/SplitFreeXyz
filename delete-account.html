@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - SplitFree</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Delete Account</h1>
+    </header>
+    <main>
+        <form id="delete-account-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <div>
+                <label for="confirmation">Are you sure you want to delete your account?</label>
+                <input type="checkbox" id="confirmation" name="confirmation" required>
+            </div>
+
+            <label for="verif">Type "Delete account permanently"</label>
+            <input type="text" id="verif" name="verif" required>
+
+            <button type="submit">Delete Account</button>
+        </form>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.5/dist/umd/supabase.min.js"></script>
+    <script>
+        const supabaseUrl = 'https://qpummxvizckytrrsiaig.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdW1teHZpemNreXRycnNpYWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1NjgzMDgsImV4cCI6MjAyODE0NDMwOH0.DYJIU3x0pd5Ub6PDz1vlJCs07O9WFIXokQLD0By8HbQ';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('delete-account-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmation = document.getElementById('confirmation').checked;
+            const verif = document.getElementById('verif').value;
+
+            if (confirmation && verif === "Delete account permanently") {
+                try {
+                    const { data: signInData, error: signInError } = await supabase.auth.signIn({ email, password });
+
+                    if (signInError) {
+                        alert('Error signing in: ' + signInError.message);
+                        return;
+                    }
+
+                    const userId = signInData.user.id;
+                    const { error: deleteError } = await supabase
+                        .from('users')
+                        .delete()
+                        .eq('id', userId);
+
+                    if (deleteError) {
+                        alert('There was an error deleting your account: ' + deleteError.message);
+                    } else {
+                        alert('Account deleted successfully.');
+                        // Optionally, sign the user out and redirect them
+                        await supabase.auth.signOut();
+                        window.location.href = '/goodbye';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('There was an error processing your request.');
+                }
+            } else {
+                alert('Please confirm and type "Delete account permanently" to proceed.');
+            }
+        });
+    </script>
+</body>
+</html>
