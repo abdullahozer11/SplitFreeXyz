@@ -8,7 +8,7 @@ Welcome to the **SplitFree** app! This app is designed to help you split expense
 
 Get SplitFree on Google Play:
 
-![Download on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" width="400"/>
 
 ## Privacy Policy
 
