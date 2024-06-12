@@ -1,6 +1,6 @@
 # SplitFree
 
-<img src="https://i.ibb.co/fvs0KY2/splitfree-xyz.png" alt="Screenshot of website" width="300"/>
+<a href="https://splitfree.xyz"><img src="https://i.ibb.co/fvs0KY2/splitfree-xyz.png" alt="Screenshot of website" width="300"/></a>
 
 Welcome to the **SplitFree** app! This app is designed to help you split expenses among friends or groups with ease.
 
